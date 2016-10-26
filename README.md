@@ -38,7 +38,7 @@ safeFn(args, function (err, result) {
 #### Parameters
 
 * `fn` is a function that receives a callback as the last. argument. The callback will receive an `err` object as the first argument.
-* `context` is the object uses as `this` when calling `fn`.
+* `context` is the object uses as `this` when calling `fn`. It is better to bind `fn` as `fn.bind(context)` instead but just in case...
 
 #### Returns value
 
