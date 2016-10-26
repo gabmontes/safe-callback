@@ -23,7 +23,7 @@ describe('Safe async calls', function () {
       done()
     })
   })
-  
+
   it('should call the callback if there is an error', function (done) {
     const testError = 'some error'
     safeFn(testError, true, false, function (err) {
@@ -32,7 +32,7 @@ describe('Safe async calls', function () {
       done()
     })
   })
-  
+
   it('should call the callback if the fn throws', function (done) {
     const testError = 'thrown error'
     safeFn(testError, false, true, function (err) {
@@ -41,15 +41,30 @@ describe('Safe async calls', function () {
       done()
     })
   })
-  
+
   it('should apply function context', function (done) {
     const testObject = {
       value: 'some text',
-      getValue: function (callback) { 
+      getValue: function (callback) {
         callback(null, this.value)
       }
     }
     const safeGetValue = shield(testObject.getValue, testObject)
+    safeGetValue(function (err, value) {
+      expect(err).to.not.exist
+      expect(value).to.equals(testObject.value)
+      done()
+    })
+  })
+
+  it('should apply function context using bind()', function (done) {
+    const testObject = {
+      value: 'some text',
+      getValue: function (callback) {
+        callback(null, this.value)
+      }
+    }
+    const safeGetValue = shield(testObject.getValue.bind(testObject))
     safeGetValue(function (err, value) {
       expect(err).to.not.exist
       expect(value).to.equals(testObject.value)
